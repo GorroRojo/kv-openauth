@@ -94,7 +94,7 @@ export default {
               login_description: "Ingresar con tu correo",
               login_prompt: "¿Ya tenés una cuenta?",
               login_title: "Bienvenide al sitio", //???
-              register: "Registrar",
+              register: "Registrate",
               register_description: "Registrate con tu correo",
               register_prompt: "¿No tenés cuenta?",
               register_title: "Bienvenide al sitio", //???
