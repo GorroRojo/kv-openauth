@@ -5,6 +5,8 @@ import { PasswordUI } from "@openauthjs/openauth/ui/password";
 import { createSubjects } from "@openauthjs/openauth/subject";
 import { object, string } from "valibot";
 import { Resend } from "resend";
+import { CodeProvider } from "@openauthjs/openauth/provider/code";
+import { CodeUI } from "@openauthjs/openauth/ui/code";
 
 // This value should be shared between the OpenAuth server Worker and other
 // client Workers that you connect to it, so the types and schema validation are
@@ -44,12 +46,25 @@ export default {
       }),
       subjects,
       providers: {
+        code: CodeProvider(CodeUI({
+          copy: {
+            button_continue: "Continuar",
+            code_didnt_get: "¿No llegó el código?",
+            code_info: "Te debería llegar un código al correo",
+            code_invalid: "Código no válido",
+            code_placeholder: "Código",
+            code_resend: "Volver a mandar",
+            code_resent: "Código mandado una vez más a ",
+            code_sent: "Código mandado a ",
+            email_invalid: "La dirección de correo no es válida.",
+            email_placeholder: "Dirección de correo"
+          },
+          sendCode: async (claims, code) => new Promise(()=>{resolve:()=>({claims, code})}),
+        })),
         password: PasswordProvider(
           PasswordUI({
             // eslint-disable-next-line @typescript-eslint/require-await
             sendCode: async (email: string, code: string) => {
-              // This is where you would email the verification code to the
-              // user, e.g. using Resend:
               const resend = new Resend(env.RESEND_KEY);
               const data = await resend.emails.send({
                 from: "Kinky Vibe Robotite <beepboop@kinkyvibe.ar>",
@@ -61,7 +76,30 @@ export default {
               console.log(data);
             },
             copy: {
+              button_continue: "Continuar",
+              change_prompt: "¿Olvidaste tu contraseña?",
+              code_resend: "Volver a mandar código",
+              code_return: "Volver a",
+              error_email_taken: "Ya existe una cuenta con esta dirección de correo",
+              error_invalid_code: "El código es incorrecto.",
+              error_invalid_email: "La dirección de correo no es válida.",
+              error_invalid_password: "La contraseña no es válida.",
+              error_password_mismatch: "Las contraseñas no coinciden.",
+              error_validation_error: "La contraseña no cumple los requisitos.",
               input_code: "Código",
+              input_email:"Dirección de correo",
+              input_password:"Contraseña",
+              input_repeat: "Repetir contraseña",
+              login: "Ingresar",
+              login_description: "Ingresar con tu correo",
+              login_prompt: "¿Ya tenés una cuenta?",
+              login_title: "Bienvenide al sitio", //???
+              register: "Registrar",
+              register_description: "Registrate con tu correo",
+              register_prompt: "¿No tenés cuenta?",
+              register_title: "Bienvenide al sitio", //???
+              // validatePassword: (psw) => psw.length < 8 ? "La contraseña debe tener al menos 8 caracteres" : undefined
+
             },
           })
         ),
