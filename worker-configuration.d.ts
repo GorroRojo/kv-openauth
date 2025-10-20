@@ -5,9 +5,9 @@ declare namespace Cloudflare {
 	interface Env {
 		AUTH_STORAGE: KVNamespace;
 		AUTH_DB: D1Database;
+        RESEND_KEY: string;
 	}
 }
-interface Env extends Cloudflare.Env {}
 
 // Begin runtime types
 /*! *****************************************************************************

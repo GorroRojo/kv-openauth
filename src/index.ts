@@ -4,6 +4,7 @@ import { PasswordProvider } from "@openauthjs/openauth/provider/password";
 import { PasswordUI } from "@openauthjs/openauth/ui/password";
 import { createSubjects } from "@openauthjs/openauth/subject";
 import { object, string } from "valibot";
+import { Resend } from "resend";
 
 // This value should be shared between the OpenAuth server Worker and other
 // client Workers that you connect to it, so the types and schema validation are
@@ -46,22 +47,30 @@ export default {
         password: PasswordProvider(
           PasswordUI({
             // eslint-disable-next-line @typescript-eslint/require-await
-            sendCode: async (email, code) => {
+            sendCode: async (email: string, code: string) => {
               // This is where you would email the verification code to the
               // user, e.g. using Resend:
+              const resend = new Resend(env.RESEND_KEY);
+              const data = await resend.emails.send({
+                from: "Kinky Vibe Robotite <beepboop@kinkyvibe.ar>",
+                to: [email],
+                subject: "El código para tu cuenta de Kinky Vibe",
+                 html: `<p>Tu código es ${code}</p>`,
+              });
               // https://resend.com/docs/send-with-cloudflare-workers
               console.log(`Sending code ${code} to ${email}`);
+              console.log(data);
             },
             copy: {
               input_code: "Code (check Worker logs)",
             },
-          }),
+          })
         ),
       },
       theme: {
-        title: "myAuth",
-        primary: "#0051c3",
-        favicon: "https://workers.cloudflare.com//favicon.ico",
+        title: "Kinky Vibe",
+        primary: "#f53dbb",
+        favicon: "https://kinkyvibe.ar/favicon-32x32.png",
         logo: {
           dark: "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/db1e5c92-d3a6-4ea9-3e72-155844211f00/public",
           light:
@@ -84,7 +93,7 @@ async function getOrCreateUser(env: Env, email: string): Promise<string> {
 		VALUES (?)
 		ON CONFLICT (email) DO UPDATE SET email = email
 		RETURNING id;
-		`,
+		`
   )
     .bind(email)
     .first<{ id: string }>();
