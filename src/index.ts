@@ -46,21 +46,6 @@ export default {
       }),
       subjects,
       providers: {
-        code: CodeProvider(CodeUI({
-          copy: {
-            button_continue: "Continuar",
-            code_didnt_get: "¿No llegó el código?",
-            code_info: "Te debería llegar un código al correo",
-            code_invalid: "Código no válido",
-            code_placeholder: "Código",
-            code_resend: "Volver a mandar",
-            code_resent: "Código mandado una vez más a ",
-            code_sent: "Código mandado a ",
-            email_invalid: "La dirección de correo no es válida.",
-            email_placeholder: "Dirección de correo"
-          },
-          sendCode: async (claims, code) => new Promise(()=>{resolve:()=>({claims, code})}),
-        })),
         password: PasswordProvider(
           PasswordUI({
             // eslint-disable-next-line @typescript-eslint/require-await
