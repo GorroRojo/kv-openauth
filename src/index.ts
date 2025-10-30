@@ -111,6 +111,7 @@ export default {
       success: async (ctx, value) => {
         return ctx.subject("user", {
           id: await getOrCreateUser(env, value.email),
+          email: value.email
         });
       },
     }).fetch(request, env, ctx);
