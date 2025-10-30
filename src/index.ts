@@ -3,7 +3,7 @@ import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare";
 import { PasswordProvider } from "@openauthjs/openauth/provider/password";
 import { PasswordUI } from "@openauthjs/openauth/ui/password";
 import { createSubjects } from "@openauthjs/openauth/subject";
-import { object, string } from "valibot";
+import { email, object, string } from "valibot";
 import { Resend } from "resend";
 
 // This value should be shared between the OpenAuth server Worker and other
@@ -12,6 +12,7 @@ import { Resend } from "resend";
 const subjects = createSubjects({
   user: object({
     id: string(),
+    email: string(),
   }),
 });
 
